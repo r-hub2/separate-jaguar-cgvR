@@ -1,21 +1,24 @@
 ## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(eval = TRUE)
+# All chunks are static: cgvR requires a Vulkan SDK to build, which is not
+# available on CRAN's check machines. Run the snippets interactively after
+# installing the package locally.
+knitr::opts_chunk$set(eval = FALSE)
 
 ## -----------------------------------------------------------------------------
-library(cgvR)
+# library(cgvR)
 
 ## -----------------------------------------------------------------------------
-nodes <- 1:8
-edges <- cbind(
-  c(1,2,3,4, 5,6,7,8, 1,2,3,4),
-  c(2,3,4,1, 6,7,8,5, 5,6,7,8)
-)
-
-# corner coordinates of a unit cube, scaled
-pos <- matrix(c(
-  -1,-1,-1,   1,-1,-1,   1, 1,-1,  -1, 1,-1,
-  -1,-1, 1,   1,-1, 1,   1, 1, 1,  -1, 1, 1
-), ncol = 3, byrow = TRUE) * 5
+# nodes <- 1:8
+# edges <- cbind(
+#   c(1,2,3,4, 5,6,7,8, 1,2,3,4),
+#   c(2,3,4,1, 6,7,8,5, 5,6,7,8)
+# )
+# 
+# # corner coordinates of a unit cube, scaled
+# pos <- matrix(c(
+#   -1,-1,-1,   1,-1,-1,   1, 1,-1,  -1, 1,-1,
+#   -1,-1, 1,   1,-1, 1,   1, 1, 1,  -1, 1, 1
+# ), ncol = 3, byrow = TRUE) * 5
 
 ## ----eval = FALSE-------------------------------------------------------------
 # v <- cgv_viewer(800, 600, "cube")
@@ -28,17 +31,17 @@ pos <- matrix(c(
 # cgv_run(v)
 
 ## -----------------------------------------------------------------------------
-set.seed(1)
-n <- 60L
-# random tree + a few extra edges
-ef <- 1L; et <- integer(0)
-for (i in 2:n) { ef <- c(ef, sample.int(i - 1, 1)); et <- c(et, i) }
-ef <- c(ef, sample.int(n, 20)); et <- c(et, sample.int(n, 20))
-edges <- cbind(ef[seq_len(min(length(ef), length(et)))],
-               et[seq_len(min(length(ef), length(et)))])
-
-pos <- cgv_layout_fr(n, edges, n_iter = 200L, seed = 42L)
-str(pos)
+# set.seed(1)
+# n <- 60L
+# # random tree + a few extra edges
+# ef <- 1L; et <- integer(0)
+# for (i in 2:n) { ef <- c(ef, sample.int(i - 1, 1)); et <- c(et, i) }
+# ef <- c(ef, sample.int(n, 20)); et <- c(et, sample.int(n, 20))
+# edges <- cbind(ef[seq_len(min(length(ef), length(et)))],
+#                et[seq_len(min(length(ef), length(et)))])
+# 
+# pos <- cgv_layout_fr(n, edges, n_iter = 200L, seed = 42L)
+# str(pos)
 
 ## ----eval = FALSE-------------------------------------------------------------
 # v <- cgv_viewer(1000, 700, "FR layout")

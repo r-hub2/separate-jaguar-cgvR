@@ -5,6 +5,10 @@
 - `cgv_camera_mode()` — switch camera mode (fly / orbit / arcball).
 - `cgv_fly_path()` — animate camera along waypoints (Catmull-Rom spline).
 - `cgv_record_start()` / `cgv_record_stop()` — video recording via ffmpeg pipe.
+- `cgv_is_stub_build()` — TRUE when the package was installed without
+  Vulkan / GLFW (stub build). Native APIs raise a clear error in that case.
+- New `configure` flags `--with-vulkan` / `--without-vulkan` to force or
+  skip the native rendering build (mirrors ggmlR's flag style).
 
 # cgvR 0.1.1
 

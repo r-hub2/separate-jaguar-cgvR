@@ -345,9 +345,6 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 through the main APIs on small built-in examples: opening a viewer,
 uploading a graph, laying it out, controlling the camera, highlighting a
 path, and recording a short video.</p>
-<p>Code that opens a real window (<code>cgv_run</code>) is shown with
-<code>eval = FALSE</code> so the vignette builds in a headless
-environment. Run those chunks interactively to see the result.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(cgvR)</span></code></pre></div>
 <hr />
 <div id="a-first-graph" class="section level2">
@@ -394,16 +391,15 @@ plasma / inferno / magma).</p>
 <span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
 <span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>pos <span class="ot">&lt;-</span> <span class="fu">cgv_layout_fr</span>(n, edges, <span class="at">n_iter =</span> <span class="dv">200</span><span class="dt">L</span>, <span class="at">seed =</span> <span class="dv">42</span><span class="dt">L</span>)</span>
 <span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="fu">str</span>(pos)</span></code></pre></div>
-<pre><code>##  num [1:60, 1:3] 2.07 6.32 1.72 9.32 -3.3 ...</code></pre>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;FR layout&quot;</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges,</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>              <span class="at">positions   =</span> pos,</span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>              <span class="at">node_values =</span> <span class="fu">as.double</span>(<span class="fu">seq_len</span>(n)),</span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>              <span class="at">node_sizes  =</span> <span class="fu">rep</span>(<span class="dv">10</span>, n))</span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">cgv_camera</span>(v, <span class="at">position =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">16</span>, <span class="dv">24</span>), <span class="at">target =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;FR layout&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges,</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>              <span class="at">positions   =</span> pos,</span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>              <span class="at">node_values =</span> <span class="fu">as.double</span>(<span class="fu">seq_len</span>(n)),</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>              <span class="at">node_sizes  =</span> <span class="fu">rep</span>(<span class="dv">10</span>, n))</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="fu">cgv_camera</span>(v, <span class="at">position =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">16</span>, <span class="dv">24</span>), <span class="at">target =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
 <p>Same call, larger graph, faster algorithm:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>pos <span class="ot">&lt;-</span> <span class="fu">cgv_layout_fr_bh</span>(<span class="dv">5000</span><span class="dt">L</span>, edges_big, <span class="at">n_iter =</span> <span class="dv">200</span><span class="dt">L</span>, <span class="at">seed =</span> <span class="dv">1</span><span class="dt">L</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>pos <span class="ot">&lt;-</span> <span class="fu">cgv_layout_fr_bh</span>(<span class="dv">5000</span><span class="dt">L</span>, edges_big, <span class="at">n_iter =</span> <span class="dv">200</span><span class="dt">L</span>, <span class="at">seed =</span> <span class="dv">1</span><span class="dt">L</span>)</span></code></pre></div>
 <hr />
 </div>
 <div id="highlighting-a-path" class="section level2">
@@ -411,18 +407,18 @@ plasma / inferno / magma).</p>
 <p><code>cgv_highlight_path</code> overlays a path on top of the
 existing graph. Pass any sequence of node ids; consecutive ids get a
 thick coloured edge between them.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;path demo&quot;</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
-<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>              <span class="at">node_values =</span> <span class="fu">as.double</span>(<span class="fu">seq_len</span>(n)),</span>
-<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>              <span class="at">node_sizes  =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
-<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">cgv_highlight_path</span>(v, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">17</span>, <span class="dv">42</span>), <span class="at">color =</span> <span class="st">&quot;#FF2200&quot;</span>,</span>
-<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                   <span class="at">node_scale =</span> <span class="fl">2.0</span>, <span class="at">edge_width =</span> <span class="fl">4.0</span>)</span>
-<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co"># remove the highlight again:</span></span>
-<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># cgv_clear_path(v)</span></span>
-<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
-<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;path demo&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>              <span class="at">node_values =</span> <span class="fu">as.double</span>(<span class="fu">seq_len</span>(n)),</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>              <span class="at">node_sizes  =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">cgv_highlight_path</span>(v, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">17</span>, <span class="dv">42</span>), <span class="at">color =</span> <span class="st">&quot;#FF2200&quot;</span>,</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>                   <span class="at">node_scale =</span> <span class="fl">2.0</span>, <span class="at">edge_width =</span> <span class="fl">4.0</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co"># remove the highlight again:</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="co"># cgv_clear_path(v)</span></span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
 <hr />
 </div>
 <div id="camera-control" class="section level2">
@@ -436,13 +432,13 @@ node.</li>
 <li><code>cgv_fly_path(v, node_ids, duration)</code> — animate along a
 Catmull-Rom spline through several waypoints.</li>
 </ul>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;camera demo&quot;</span>)</span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>              <span class="at">node_sizes =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">cgv_camera_mode</span>(v, <span class="st">&quot;orbit&quot;</span>)</span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">cgv_fly_path</span>(v, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">17</span>, <span class="dv">42</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">duration =</span> <span class="fl">6.0</span>)</span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;camera demo&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>              <span class="at">node_sizes =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a><span class="fu">cgv_camera_mode</span>(v, <span class="st">&quot;orbit&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">cgv_fly_path</span>(v, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">17</span>, <span class="dv">42</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">duration =</span> <span class="fl">6.0</span>)</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
 <hr />
 </div>
 <div id="recording-a-video" class="section level2">
@@ -452,24 +448,24 @@ frames to <code>ffmpeg</code> (must be on <code>PATH</code>). In
 offscreen mode you control the number of frames explicitly via
 <code>cgv_run(v, n_frames = ...)</code>, which is convenient for
 scripted rendering.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1280</span>, <span class="dv">720</span>, <span class="st">&quot;record demo&quot;</span>, <span class="at">offscreen =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>              <span class="at">node_sizes =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">cgv_camera</span>(v, <span class="at">position =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">16</span>, <span class="dv">24</span>), <span class="at">target =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
-<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a></span>
-<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">cgv_record_start</span>(v, <span class="st">&quot;demo.mp4&quot;</span>, <span class="at">fps =</span> <span class="dv">30</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v, <span class="at">n_frames =</span> <span class="dv">90</span><span class="dt">L</span>)        <span class="co"># 3 seconds at 30 fps</span></span>
-<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">cgv_record_stop</span>(v)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1280</span>, <span class="dv">720</span>, <span class="st">&quot;record demo&quot;</span>, <span class="at">offscreen =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>              <span class="at">node_sizes =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="fu">cgv_camera</span>(v, <span class="at">position =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">16</span>, <span class="dv">24</span>), <span class="at">target =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">cgv_record_start</span>(v, <span class="st">&quot;demo.mp4&quot;</span>, <span class="at">fps =</span> <span class="dv">30</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v, <span class="at">n_frames =</span> <span class="dv">90</span><span class="dt">L</span>)        <span class="co"># 3 seconds at 30 fps</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="fu">cgv_record_stop</span>(v)</span></code></pre></div>
 <hr />
 </div>
 <div id="headless-mode" class="section level2">
 <h2>6. Headless mode</h2>
 <p><code>offscreen = TRUE</code> skips the GLFW window. Useful for
 tests, CI, and anywhere a display is unavailable.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">640</span>, <span class="dv">480</span>, <span class="at">offscreen =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, nodes, edges, <span class="at">positions =</span> pos)</span>
-<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">cgv_run</span>(v, <span class="at">n_frames =</span> <span class="dv">1</span><span class="dt">L</span>)</span>
-<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">cgv_close</span>(v)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">640</span>, <span class="dv">480</span>, <span class="at">offscreen =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, nodes, edges, <span class="at">positions =</span> pos)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">cgv_run</span>(v, <span class="at">n_frames =</span> <span class="dv">1</span><span class="dt">L</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">cgv_close</span>(v)</span></code></pre></div>
 <hr />
 </div>
 <div id="where-to-next" class="section level2">
