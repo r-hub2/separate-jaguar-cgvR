@@ -27,6 +27,33 @@ done
 
 DVZ_INC_DIR="inst/include"
 
+# ---- Detect target OS ----
+UNAME_S=$(uname -s 2>/dev/null || echo "unknown")
+case "$UNAME_S" in
+  Linux)
+    OS_DEFINES="-DOS_LINUX=1"
+    OS_EXTRA_CFLAGS=""
+    OS_EXTRA_LIBS="-lm -ldl -lpthread -lstdc++"
+    OS_NAME="Linux"
+    ;;
+  Darwin)
+    OS_DEFINES="-DOS_MACOS=1"
+    # Match Datoviz upstream (CMAKE_OSX_DEPLOYMENT_TARGET 12).
+    OS_EXTRA_CFLAGS="-mmacosx-version-min=12.0"
+    # GLFW's pkg-config Libs.private already adds -framework Cocoa/IOKit/CoreFoundation,
+    # so we don't have to. macOS doesn't need -ldl (dlopen is in libSystem).
+    OS_EXTRA_LIBS="-lm -lpthread -lc++"
+    OS_NAME="macOS"
+    ;;
+  *)
+    OS_DEFINES="-DOS_LINUX=1"
+    OS_EXTRA_CFLAGS=""
+    OS_EXTRA_LIBS="-lm -ldl -lpthread -lstdc++"
+    OS_NAME="Unknown ($UNAME_S, treating as Linux)"
+    ;;
+esac
+echo "* Target OS: $OS_NAME"
+
 write_stub_makevars() {
   REASON="$1"
   echo ""
@@ -51,7 +78,8 @@ require_full_or_die() {
   if [ "$USE_VULKAN" = "yes" ]; then
     echo "ERROR: --with-vulkan requested but $REASON"
     echo "  Ubuntu/Debian: sudo apt install libvulkan-dev libglfw3-dev pkg-config"
-    echo "  macOS:         brew install glfw  +  LunarG Vulkan SDK"
+    echo "  macOS:         brew install glfw pkg-config vulkan-loader vulkan-headers"
+    echo "                 (or install LunarG Vulkan SDK and 'export VULKAN_SDK=...')"
     exit 1
   fi
   write_stub_makevars "$REASON"
@@ -81,16 +109,35 @@ if command -v pkg-config >/dev/null 2>&1 && pkg-config --exists vulkan 2>/dev/nu
   VULKAN_CFLAGS=$(pkg-config --cflags vulkan)
   VULKAN_LIBS=$(pkg-config --libs vulkan)
   echo "* Vulkan: found via pkg-config ($(pkg-config --modversion vulkan))"
+elif [ -n "$VULKAN_SDK" ] && [ -f "$VULKAN_SDK/macOS/include/vulkan/vulkan.h" ]; then
+  # LunarG SDK layout (older / .dmg installer)
+  VULKAN_CFLAGS="-I$VULKAN_SDK/macOS/include"
+  VULKAN_LIBS="-L$VULKAN_SDK/macOS/lib -lvulkan"
+  echo "* Vulkan: found via VULKAN_SDK/macOS ($VULKAN_SDK)"
 elif [ -n "$VULKAN_SDK" ] && [ -f "$VULKAN_SDK/include/vulkan/vulkan.h" ]; then
+  # LunarG SDK layout (newer / Linux / unified macOS)
   VULKAN_CFLAGS="-I$VULKAN_SDK/include"
   VULKAN_LIBS="-L$VULKAN_SDK/lib -lvulkan"
   echo "* Vulkan: found via VULKAN_SDK ($VULKAN_SDK)"
-elif [ -f /usr/lib/x86_64-linux-gnu/libvulkan.so ] || [ -f /usr/lib/libvulkan.so ] \
-     || [ -f /opt/homebrew/lib/libvulkan.dylib ] || [ -f /usr/local/lib/libvulkan.dylib ]; then
+elif [ -f /usr/lib/x86_64-linux-gnu/libvulkan.so ] || [ -f /usr/lib/libvulkan.so ]; then
   VULKAN_LIBS="-lvulkan"
-  echo "* Vulkan: found (system libvulkan, no pkg-config)"
+  echo "* Vulkan: found (Linux system libvulkan, no pkg-config)"
+elif [ -f /opt/homebrew/lib/libvulkan.dylib ]; then
+  # Apple Silicon Homebrew (vulkan-loader)
+  VULKAN_CFLAGS="-I/opt/homebrew/include"
+  VULKAN_LIBS="-L/opt/homebrew/lib -lvulkan"
+  echo "* Vulkan: found via Homebrew (/opt/homebrew)"
+elif [ -f /usr/local/lib/libvulkan.dylib ]; then
+  # Intel Homebrew (vulkan-loader)
+  VULKAN_CFLAGS="-I/usr/local/include"
+  VULKAN_LIBS="-L/usr/local/lib -lvulkan"
+  echo "* Vulkan: found via Homebrew (/usr/local)"
 else
-  require_full_or_die "Vulkan loader not found (install libvulkan-dev or set VULKAN_SDK)"
+  if [ "$OS_NAME" = "macOS" ]; then
+    require_full_or_die "Vulkan loader not found. Install LunarG Vulkan SDK and 'export VULKAN_SDK=...'"
+  else
+    require_full_or_die "Vulkan loader not found (install libvulkan-dev or set VULKAN_SDK)"
+  fi
 fi
 
 # ---- Detect GLFW3 ----
@@ -149,6 +196,9 @@ fi
 
 # ---- Generate src/Makevars ----
 sed -e "s|@DVZ_INC_DIR@|${DVZ_INC_DIR}|g" \
+    -e "s|@OS_DEFINES@|${OS_DEFINES}|g" \
+    -e "s|@OS_EXTRA_CFLAGS@|${OS_EXTRA_CFLAGS}|g" \
+    -e "s|@OS_EXTRA_LIBS@|${OS_EXTRA_LIBS}|g" \
     -e "s|@VULKAN_CFLAGS@|${VULKAN_CFLAGS}|g" \
     -e "s|@VULKAN_LIBS@|${VULKAN_LIBS}|g" \
     -e "s|@GLFW_CFLAGS@|${GLFW_CFLAGS}|g" \
@@ -160,5 +210,6 @@ sed -e "s|@DVZ_INC_DIR@|${DVZ_INC_DIR}|g" \
 echo "* Wrote src/Makevars"
 echo ""
 echo "Configuration complete."
+echo "  OS:     $OS_NAME"
 echo "  Vulkan: ENABLED"
 echo "  SIMD:   $([ "$USE_SIMD" = "yes" ] && echo "ENABLED ($FPNG_CFLAGS )" || echo "disabled")"

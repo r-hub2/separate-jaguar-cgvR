@@ -30,6 +30,12 @@ camera/path animation utilities for exploring such graphs interactively.
 
 ### System requirements
 
+Supported operating systems (matches Datoviz upstream):
+
+* **Linux x86_64** — Ubuntu 22.04 or later (glibc 2.34+).
+* **macOS 12 or later** — x86_64 and arm64 (Apple silicon M1–M4).
+* **Windows 10 or later** — x86_64.
+
 Vulkan support is **auto-detected** at install time. If the dependencies are
 missing, the package falls back to a stub build (see below).
 
@@ -51,15 +57,18 @@ Internet access during install is required — `configure.win` downloads the
 prebuilt `datoviz.dll` from GitHub releases (cached in `inst/lib/` afterwards).
 Optional: `ffmpeg.exe` on `PATH` for `cgv_record_*`.
 
-**macOS** — install dependencies via Homebrew + LunarG (untested in 0.1.2):
+**macOS 12 or later (x86_64 and arm64)** — install dependencies via Homebrew
+plus the LunarG Vulkan SDK (which ships MoltenVK):
 ```bash
 brew install glfw pkg-config
-# Then install LunarG Vulkan SDK (ships MoltenVK):
+# Then install LunarG Vulkan SDK from
 #   https://vulkan.lunarg.com/sdk/home#mac
-# Make sure $VULKAN_SDK is exported.
+# and 'export VULKAN_SDK=...' before R CMD INSTALL.
 ```
-The Makevars currently hard-codes `-DOS_LINUX=1`; macOS users will likely fall
-back to the stub build. Full macOS support is on the roadmap.
+configure auto-detects `Darwin` (sets `OS_MACOS=1`, links against the
+system MoltenVK loader, applies `-mmacosx-version-min=12.0`). GLFW pulls
+the required Cocoa / IOKit / CoreFoundation frameworks via its own
+`pkg-config --libs glfw3`.
 
 A working **Vulkan GPU driver** is required at runtime regardless of platform
 (Mesa / NVIDIA / AMD on Linux, vendor driver on Windows, MoltenVK on macOS).
