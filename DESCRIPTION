@@ -1,0 +1,34 @@
+Package: cgvR
+Type: Package
+Title: Interactive 3D Visualization of Large Cayley Graphs via Vulkan
+Version: 0.1.2
+Authors@R: c(
+    person("Yuri", "Baramykov",
+        email = "lbsbmsu@mail.ru",
+        role = c("aut", "cre")),
+    person("Cyrille", "Rossant",
+        role = c("ctb", "cph"),
+        comment = "Author of the Datoviz library")
+    )
+Description: Interactive 3D visualization of large Cayley graphs using
+    Vulkan-based rendering based on 'Datoviz' library.
+Depends: R (>= 4.1.0)
+Imports: grDevices, stats
+Suggests: cayleyR, knitr, rmarkdown, testthat (>= 3.0.0)
+VignetteBuilder: knitr
+License: MIT + file LICENSE
+Encoding: UTF-8
+SystemRequirements: C17, GNU make, pkg-config, Vulkan (>= 1.2) SDK
+        (libvulkan-dev + glslc on Linux), GLFW3 (libglfw3-dev on
+        Linux). Optional configure flag --with-simd enables SSE4.1 +
+        PCLMUL for faster PNG screenshots (fpng); disabled by default
+        for portability.
+RoxygenNote: 7.3.3
+Config/testthat/edition: 3
+URL: https://github.com/Zabis13/cgvR
+BugReports: https://github.com/Zabis13/cgvR/issues
+NeedsCompilation: yes
+Packaged: 2026-04-26 15:05:26 UTC; yuri
+Author: Yuri Baramykov [aut, cre],
+  Cyrille Rossant [ctb, cph] (Author of the Datoviz library)
+Maintainer: Yuri Baramykov <lbsbmsu@mail.ru>

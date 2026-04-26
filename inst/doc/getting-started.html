@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Getting started with cgvR</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Getting started with cgvR</h1>
+
+
+
+<p>cgvR renders 3D graphs with a Vulkan backend. This vignette walks
+through the main APIs on small built-in examples: opening a viewer,
+uploading a graph, laying it out, controlling the camera, highlighting a
+path, and recording a short video.</p>
+<p>Code that opens a real window (<code>cgv_run</code>) is shown with
+<code>eval = FALSE</code> so the vignette builds in a headless
+environment. Run those chunks interactively to see the result.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(cgvR)</span></code></pre></div>
+<hr />
+<div id="a-first-graph" class="section level2">
+<h2>1. A first graph</h2>
+<p>Start with a tiny graph: 8 nodes on the corners of a cube, edges
+along the cube’s edges. Positions are explicit, no layout needed.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>nodes <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">8</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>edges <span class="ot">&lt;-</span> <span class="fu">cbind</span>(</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>, <span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>, <span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>  <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>,<span class="dv">1</span>, <span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">5</span>, <span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="co"># corner coordinates of a unit cube, scaled</span></span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>pos <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>  <span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>,   <span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>,   <span class="dv">1</span>, <span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>,  <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>  <span class="sc">-</span><span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>,   <span class="dv">1</span>,<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>,   <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>,  <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span></span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1"></a>), <span class="at">ncol =</span> <span class="dv">3</span>, <span class="at">byrow =</span> <span class="cn">TRUE</span>) <span class="sc">*</span> <span class="dv">5</span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">800</span>, <span class="dv">600</span>, <span class="st">&quot;cube&quot;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">cgv_background</span>(v, <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, nodes, edges,</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a>              <span class="at">positions   =</span> pos,</span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a>              <span class="at">node_values =</span> <span class="fu">as.double</span>(<span class="fu">seq_len</span>(<span class="dv">8</span>)),</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>              <span class="at">node_sizes  =</span> <span class="fu">rep</span>(<span class="dv">20</span>, <span class="dv">8</span>))</span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">cgv_camera</span>(v, <span class="at">position =</span> <span class="fu">c</span>(<span class="dv">15</span>, <span class="dv">12</span>, <span class="dv">18</span>), <span class="at">target =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
+<p><code>node_values</code> is mapped through a colormap (viridis by
+default — see <code>cmap</code> in <code>?cgv_set_graph</code> for
+plasma / inferno / magma).</p>
+<hr />
+</div>
+<div id="force-directed-layout" class="section level2">
+<h2>2. Force-directed layout</h2>
+<p>For graphs without natural coordinates use <code>cgv_layout_fr</code>
+(pure-R Fruchterman-Reingold) or <code>cgv_layout_fr_bh</code>
+(Barnes-Hut, O(n log n) in C — prefer it for thousands of nodes).</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">60</span><span class="dt">L</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="co"># random tree + a few extra edges</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a>ef <span class="ot">&lt;-</span> <span class="dv">1</span><span class="dt">L</span>; et <span class="ot">&lt;-</span> <span class="fu">integer</span>(<span class="dv">0</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span>n) { ef <span class="ot">&lt;-</span> <span class="fu">c</span>(ef, <span class="fu">sample.int</span>(i <span class="sc">-</span> <span class="dv">1</span>, <span class="dv">1</span>)); et <span class="ot">&lt;-</span> <span class="fu">c</span>(et, i) }</span>
+<span id="cb4-6"><a href="#cb4-6" tabindex="-1"></a>ef <span class="ot">&lt;-</span> <span class="fu">c</span>(ef, <span class="fu">sample.int</span>(n, <span class="dv">20</span>)); et <span class="ot">&lt;-</span> <span class="fu">c</span>(et, <span class="fu">sample.int</span>(n, <span class="dv">20</span>))</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1"></a>edges <span class="ot">&lt;-</span> <span class="fu">cbind</span>(ef[<span class="fu">seq_len</span>(<span class="fu">min</span>(<span class="fu">length</span>(ef), <span class="fu">length</span>(et)))],</span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1"></a>               et[<span class="fu">seq_len</span>(<span class="fu">min</span>(<span class="fu">length</span>(ef), <span class="fu">length</span>(et)))])</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1"></a>pos <span class="ot">&lt;-</span> <span class="fu">cgv_layout_fr</span>(n, edges, <span class="at">n_iter =</span> <span class="dv">200</span><span class="dt">L</span>, <span class="at">seed =</span> <span class="dv">42</span><span class="dt">L</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1"></a><span class="fu">str</span>(pos)</span></code></pre></div>
+<pre><code>##  num [1:60, 1:3] 2.07 6.32 1.72 9.32 -3.3 ...</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;FR layout&quot;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges,</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a>              <span class="at">positions   =</span> pos,</span>
+<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a>              <span class="at">node_values =</span> <span class="fu">as.double</span>(<span class="fu">seq_len</span>(n)),</span>
+<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a>              <span class="at">node_sizes  =</span> <span class="fu">rep</span>(<span class="dv">10</span>, n))</span>
+<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a><span class="fu">cgv_camera</span>(v, <span class="at">position =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">16</span>, <span class="dv">24</span>), <span class="at">target =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
+<p>Same call, larger graph, faster algorithm:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>pos <span class="ot">&lt;-</span> <span class="fu">cgv_layout_fr_bh</span>(<span class="dv">5000</span><span class="dt">L</span>, edges_big, <span class="at">n_iter =</span> <span class="dv">200</span><span class="dt">L</span>, <span class="at">seed =</span> <span class="dv">1</span><span class="dt">L</span>)</span></code></pre></div>
+<hr />
+</div>
+<div id="highlighting-a-path" class="section level2">
+<h2>3. Highlighting a path</h2>
+<p><code>cgv_highlight_path</code> overlays a path on top of the
+existing graph. Pass any sequence of node ids; consecutive ids get a
+thick coloured edge between them.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;path demo&quot;</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>              <span class="at">node_values =</span> <span class="fu">as.double</span>(<span class="fu">seq_len</span>(n)),</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>              <span class="at">node_sizes  =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a><span class="fu">cgv_highlight_path</span>(v, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">5</span>, <span class="dv">17</span>, <span class="dv">42</span>), <span class="at">color =</span> <span class="st">&quot;#FF2200&quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>                   <span class="at">node_scale =</span> <span class="fl">2.0</span>, <span class="at">edge_width =</span> <span class="fl">4.0</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a><span class="co"># remove the highlight again:</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a><span class="co"># cgv_clear_path(v)</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
+<hr />
+</div>
+<div id="camera-control" class="section level2">
+<h2>4. Camera control</h2>
+<p>Three modes are available — <code>fly</code> (WASD + mouse),
+<code>orbit</code>, <code>arcball</code>. Switch at runtime with
+<code>cgv_camera_mode</code>. Two helpers animate the camera:</p>
+<ul>
+<li><code>cgv_fly_to(v, node_id, duration)</code> — fly to a single
+node.</li>
+<li><code>cgv_fly_path(v, node_ids, duration)</code> — animate along a
+Catmull-Rom spline through several waypoints.</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1000</span>, <span class="dv">700</span>, <span class="st">&quot;camera demo&quot;</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>              <span class="at">node_sizes =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="fu">cgv_camera_mode</span>(v, <span class="st">&quot;orbit&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="fu">cgv_fly_path</span>(v, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">17</span>, <span class="dv">42</span>, <span class="dv">5</span>, <span class="dv">1</span>), <span class="at">duration =</span> <span class="fl">6.0</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v)</span></code></pre></div>
+<hr />
+</div>
+<div id="recording-a-video" class="section level2">
+<h2>5. Recording a video</h2>
+<p><code>cgv_record_start</code> / <code>cgv_record_stop</code> pipe
+frames to <code>ffmpeg</code> (must be on <code>PATH</code>). In
+offscreen mode you control the number of frames explicitly via
+<code>cgv_run(v, n_frames = ...)</code>, which is convenient for
+scripted rendering.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">1280</span>, <span class="dv">720</span>, <span class="st">&quot;record demo&quot;</span>, <span class="at">offscreen =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, <span class="fu">seq_len</span>(n), edges, <span class="at">positions =</span> pos,</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a>              <span class="at">node_sizes =</span> <span class="fu">rep</span>(<span class="dv">8</span>, n))</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">cgv_camera</span>(v, <span class="at">position =</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">16</span>, <span class="dv">24</span>), <span class="at">target =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>))</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="fu">cgv_record_start</span>(v, <span class="st">&quot;demo.mp4&quot;</span>, <span class="at">fps =</span> <span class="dv">30</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="fu">cgv_run</span>(v, <span class="at">n_frames =</span> <span class="dv">90</span><span class="dt">L</span>)        <span class="co"># 3 seconds at 30 fps</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="fu">cgv_record_stop</span>(v)</span></code></pre></div>
+<hr />
+</div>
+<div id="headless-mode" class="section level2">
+<h2>6. Headless mode</h2>
+<p><code>offscreen = TRUE</code> skips the GLFW window. Useful for
+tests, CI, and anywhere a display is unavailable.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>v <span class="ot">&lt;-</span> <span class="fu">cgv_viewer</span>(<span class="dv">640</span>, <span class="dv">480</span>, <span class="at">offscreen =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="fu">cgv_set_graph</span>(v, nodes, edges, <span class="at">positions =</span> pos)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a><span class="fu">cgv_run</span>(v, <span class="at">n_frames =</span> <span class="dv">1</span><span class="dt">L</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a><span class="fu">cgv_close</span>(v)</span></code></pre></div>
+<hr />
+</div>
+<div id="where-to-next" class="section level2">
+<h2>Where to next</h2>
+<p>The <code>inst/examples/</code> directory ships ready-to-run
+scripts:</p>
+<ul>
+<li><code>demo_small_graph.R</code> — random 100-node graph with FR
+layout.</li>
+<li><code>demo_cycles_bh.R</code> — TopSpin cycles with Barnes-Hut
+FR.</li>
+<li><code>demo_tictactoe.R</code> — Tic-Tac-Toe state graph; node colour
+= move number.</li>
+<li><code>demo_record.R</code>, <code>demo_cycles_bh_record.R</code> —
+video recording end-to-end.</li>
+</ul>
+<p>Run them with <code>Rscript inst/examples/&lt;file&gt;.R</code> from
+the package root.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
