@@ -1,6 +1,11 @@
 # cgvR
 
+[![R-hub check on the R Consortium cluster](https://github.com/r-hub2/separate-jaguar-cgvR/actions/workflows/rhub-rc.yaml/badge.svg)](https://github.com/r-hub2/separate-jaguar-cgvR/actions/workflows/rhub-rc.yaml)
+
 Interactive 3D visualization of large Cayley and state-space graphs via Vulkan.
+
+https://github.com/user-attachments/assets/9af70289-d865-44db-b0a0-e67269fdd120
+
 
 ## Overview
 
