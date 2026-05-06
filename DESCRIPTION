@@ -36,7 +36,7 @@ Config/testthat/edition: 3
 URL: https://github.com/Zabis13/cgvR
 BugReports: https://github.com/Zabis13/cgvR/issues
 NeedsCompilation: yes
-Packaged: 2026-05-01 19:02:24 UTC; yuri
+Packaged: 2026-05-06 09:01:25 UTC; yuri
 Author: Yuri Baramykov [aut, cre] (<https://orcid.org/0009-0000-7627-4217>),
   Cyrille Rossant [ctb, cph] (Author of the Datoviz library)
 Maintainer: Yuri Baramykov <lbsbmsu@mail.ru>
